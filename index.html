@@ -69,25 +69,33 @@
     </form>
 
     <section id="error-btns">
-      <button>Console Log</button>
-      <button>Console Error</button>
-      <button>Console Count</button>
-      <button>Console Warn</button>
-      <button>Console Assert</button>
-      <button>Console Clear</button>
-      <button>Console Dir</button>
-      <button>Console dirxml</button>
-      <button>Console Group Start</button>
-      <button>Console Group End</button>
-      <button>Console Table</button>
-      <button>Start Timer</button>
-      <button>End Timer</button>
-      <button>Console Trace</button>
-      <button>Trigger a Global Error</button>
+      <button onclick="console.log('cse 110 console log')">Console Log</button>
+      <button onclick="console.error('Error message!')">Console Error</button>
+      <button onclick="console.count('counter')">Console Count</button>
+      <button onclick="console.warn('warning!')">Console Warn</button>
+      <button onclick="console.assert(5 < 3, '5 is not less than 3')">Console Assert</button>
+      <button onclick="console.clear()">Console Clear</button>
+      <button onclick="console.dir(document.head)">Console Dir</button>
+      <button onclick="console.dirxml(document.head)">Console dirxml</button>
+      <button onclick="console.group('group start example')">Console Group Start</button>
+      <button onclick="console.groupCollapsed('group end example')">Console Group End</button>
+      <button onclick="tableFunction()">Console Table</button>
+      <button onclick="timerFunction()">Start Timer</button>
+      <button onclick="endTimerFunction()">End Timer</button>
+      <button onclick="traceFunction()">Console Trace</button>
+      <button onclick="globalErrFunction()">Trigger a Global Error</button>
     </section>
   </main>
-
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
   <script>
+    window.TrackJS && TrackJS.install({ 
+      token: "304c0b71fe2142d493ca030712836d99"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+  </script>
+                        
+
+  <script>      
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
       e.preventDefault();
@@ -95,13 +103,63 @@
       let firstNum = document.querySelector('#first-num').value;
       let secondNum = document.querySelector('#second-num').value;
       let operator = document.querySelector('#operator').value;
-      output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      
     });
+    try {
+      output.innerHTML = eval(`${firstNum} ${operator} ${secondNum}`);
+      console.log("no errors");
+    }
+    catch {
+      console.error("there is an error!");
+    }
+    finally {
+      console.log("all good");
+    }
+
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
 
+    class MyCustomErrorClass extends Error {
+      constructor(message) {
+        super(message);
+        this.name = "CustomError";
+      }
+    }
     // Start your code here
     // You may move this JS to another file if you wish
+    function tableFunction() {
+      console.table ([
+        {first: 'Zhuoran', last: 'Tang'},
+        {first: 'A', last: 'B'},
+        {first: 'C', last: 'D'}
+      ]);
+    }
+
+    function timerFunction() {
+      console.time();
+    }
+
+    function endTimerFunction() {
+      console.timeEnd();
+    }
+
+    function anotherFunction() {
+      console.trace();
+    }
+
+    function traceFunction() {
+      anotherFunction();
+    }
+
+    function globalErrFunction() {
+      throw new MyCustomErrorClass('global error alert!');
+    }
+
+    window.onerror = function(message, source, lineno, colno, error) {
+      console.log("example of using window.onerror");
+    }
+    
+    
   </script>
 </body>
 
